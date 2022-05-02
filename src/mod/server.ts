@@ -9,7 +9,7 @@ net.createServer((connection) => {
     const command = spawn(data.toString(), {shell: true});
     command.stdout.on('data', (dataChunk) => {
       // eslint-disable-next-line max-len
-      connection.write(JSON.stringify({'type': 'success', 'msg': dataChunk.toString()}));
+      connection.write(JSON.stringify({'type': 'success', 'msg': dataChunk.toString()}) + '\n');
       connection.end();
     });
 
