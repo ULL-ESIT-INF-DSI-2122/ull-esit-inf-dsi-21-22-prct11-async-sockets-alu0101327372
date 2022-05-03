@@ -1,23 +1,24 @@
 import * as net from 'net';
 import chalk from 'chalk';
 import {ResponseType} from '../types';
+import {Nota} from '../app/Nota';
 import {AppNotas} from '../app/AppNotas';
 import {MessageEventEmitterServer} from './messageEventEmitterServer';
 
 /**
- * A server is created with the net module of Node.js.
+ * Se crea un servidor con el módulo net de Node.js.
  */
 const server = net.createServer((connection) => {
   /**
-   * An object of class MessageEventEmitterServer is created.
+   * Se crea un objeto de clase MessageEventEmitterServer.
    */
   const socket = new MessageEventEmitterServer(connection);
 
   console.log(chalk.bold.green('A client has connected.'));
 
   /**
-   * When the request event is received,
-   * the message sent by the client is processed.
+   * Cuando se recibe el evento de solicitud,
+   * se procesa el mensaje enviado por el cliente.
    */
   socket.on('request', (note) => {
     const database = new AppNotas();
@@ -47,55 +48,63 @@ const server = net.createServer((connection) => {
         break;
       case 'list':
         response.type = 'list';
-        const listNotes: string = database.listNotas(note.usuario);
-        response.notes = listNotes;
+        const listNotes: Nota[] = database.listNotas(note.usuario);
+        if (listNotes.length == 0) {
+          response.success = false;
+        } else {
+          response.notes = listNotes;
+        }
         break;
       case 'read':
         response.type = 'read';
         const noteContent = database.readNota(note.usuario, note.titulo);
-        response.notes = noteContent;
-        break;
+        if (noteContent == false) {
+          response.success = false;
+        } else if (typeof noteContent !== 'boolean') {
+          response.notes = [noteContent];
+        }
       default:
-        console.log(chalk.bold.red('The type of message is wrong'));
+        console.log(chalk.bold.red('El tipo de mensaje es incorrecto.'));
         break;
     }
 
     /**
-     * The response is sent to the client.
+     * La respuesta se envía al cliente.
      */
     connection.write(JSON.stringify(response), (error) => {
       if (error) {
         console.log(chalk.bold.
-            red('The response has not been sent to the client.'));
+            red('La respuesta no ha sido enviada al cliente.'));
       } else {
         console.log(chalk.bold.
-            green('The response has been sent to the client.'));
+            green('La respuesta ha sido enviada al cliente.'));
         connection.end();
       }
     });
   });
 
   /**
-   * If there is an error in the connection it is handled properly.
+   * Si hay un error en la conexión se maneja correctamente.
    */
   connection.on('error', (err) => {
     if (err) {
-      console.log(`Connection could not be established: ${err.message}`);
+      console.log(`No se pudo establecer la conexión: ${err.message}`);
     }
   });
 
   /**
-   * When a client disconnects a message informing about this is displayed
-   * on the server.
+   * Cuando un cliente se desconecta se muestra un mensaje informando de ello
+   * en el servidor.
    */
   connection.on('close', () => {
-    console.log(chalk.bold.green('A client has disconnected.\n'));
+    console.log(chalk.bold.green('Un cliente se ha desconectado.\n'));
   });
 });
 
 /**
- * The server is listening on port 60300.
+ * El servidor está escuchando en el puerto 60300.
  */
 server.listen(60300, () => {
-  console.log(chalk.bold.green('Waiting for clients to connect...\n'));
+  console.log(chalk.bold.
+      green('Esperando a que los clientes se conecten ...\n'));
 });

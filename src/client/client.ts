@@ -5,17 +5,17 @@ import {MessageEventEmitterClient} from './messageEventEmitterClient';
 import {RequestType} from '../types';
 
 /**
- * A client connected to port 60300 of the server is created.
+ * Se crea un cliente conectado al puerto 60300 del servidor.
  */
 const client = net.connect({port: 60300});
 
 /**
- * An object of class MessageEventEmitterClient is created.
+ * Se crea un objeto de clase MessageEventEmitterClient.
  */
 const socket = new MessageEventEmitterClient(client);
 
 /**
- * The request message is by default of type add.
+ * El mensaje de solicitud es por defecto del tipo add.
  */
 let request: RequestType = {
   type: 'add',
@@ -23,29 +23,29 @@ let request: RequestType = {
 };
 
 /**
- * Command to add a note to the list.
+ * Comando para agregar una nota a la lista.
  */
 yargs.command( {
   command: 'add',
-  describe: 'Add a new note',
+  describe: 'Agregar una nueva nota',
   builder: {
     usuario: {
-      describe: 'Usuario who is going to add the note',
+      describe: 'Usuario que va a añadir la nota',
       demandOption: true,
       type: 'string',
     },
     titulo: {
-      describe: 'The titulo of the note',
+      describe: 'El titulo de la nota.',
       demandOption: true,
       type: 'string',
     },
     cuerpo: {
-      describe: 'The text of the note',
+      describe: 'El cuerpo de la nota',
       demandOption: true,
       type: 'string',
     },
     color: {
-      describe: 'The color of the note',
+      describe: 'El color de la nota.',
       demandOption: true,
       type: 'string',
     },
@@ -63,35 +63,35 @@ yargs.command( {
           color: argv.color,
         };
       } else {
-        console.log(chalk.
-            bold.red('Note color must be red, green, yellow, or blue'));
+        console.log(chalk.bold.
+            red('El color de la nota debe ser rojo, verde, amarillo o azul.'));
       }
     }
   },
 });
 
 /**
- * Command to modify a note in the list.
+ * Comando para modificar una nota en la lista.
  */
 yargs.command({
   command: 'modify',
-  describe: 'Modify a note',
+  describe: 'Modificar una nota',
 
   builder: {
     usuario: {
-      describe: 'Usuario who is going to modify a note',
+      describe: 'Usuario que va a modificar una nota',
       demandOption: true,
       type: 'string',
     },
 
     titulo: {
-      describe: 'The titulo of the note',
+      describe: 'El titulo de la nota.',
       demandOption: true,
       type: 'string',
     },
 
     cuerpo: {
-      describe: 'The text of the note',
+      describe: 'El cuerpo de la nota.',
       demandOption: true,
       type: 'string',
     },
@@ -108,8 +108,8 @@ yargs.command({
       if (argv.color != 'azul' &&
             argv.color != 'rojo' && argv.color != 'amarillo' &&
             argv.color != 'verde') {
-        console.log(chalk.
-            bold.red('Note color must be red, green, blue, or yellow.'));
+        console.log(chalk.bold.
+            red('El color de la nota debe ser rojo, verde, azul o amarillo.'));
       } else {
         request = {
           type: 'modify',
@@ -124,19 +124,19 @@ yargs.command({
 });
 
 /**
- * Command to remove a note from the list.
+ * Comando para eliminar una nota de la lista.
  */
 yargs.command({
   command: 'remove',
-  describe: 'Delete a note',
+  describe: 'Eliminar una nota',
   builder: {
     usuario: {
-      describe: 'usuario who is going to delete the note',
+      describe: 'Usuario que va a borrar la nota',
       demandOption: true,
       type: 'string',
     },
     titulo: {
-      describe: 'The titulo of the note',
+      describe: 'El titulo de la nota.',
       demandOption: true,
       type: 'string',
     },
@@ -153,14 +153,14 @@ yargs.command({
 });
 
 /**
- * Command to list the titulos of a usuario's notes.
+ * Comando para listar los títulos de las notas de un usuario.
  */
 yargs.command({
   command: 'list',
-  describe: 'List the titulos of the notes',
+  describe: 'Listar los títulos de las notas',
   builder: {
     usuario: {
-      describe: 'usuario who will show his notes',
+      describe: 'Usuario que mostrará sus notas',
       demandOption: true,
       type: 'string',
     },
@@ -176,19 +176,19 @@ yargs.command({
 });
 
 /**
- * Command to read a specific note from the list.
+ * Comando para leer una nota específica de la lista.
  */
 yargs.command({
   command: 'read',
-  describe: 'Read a specific note from the list',
+  describe: 'Leer una nota específica de la lista',
   builder: {
     usuario: {
-      describe: 'usuario who will read a note',
+      describe: 'Usuario que leerá una nota',
       demandOption: true,
       type: 'string',
     },
     titulo: {
-      describe: 'The titulo of the note',
+      describe: 'El titulo de la nota.',
       demandOption: true,
       type: 'string',
     },
@@ -205,12 +205,12 @@ yargs.command({
 });
 
 /**
- * Process the arguments passed from the command line to the application.
+ * Procesa los argumentos pasados desde la línea de comandos a la aplicación.
  */
 yargs.parse();
 
 /**
- * The message is sent to the server.
+ * El mensaje se envía al servidor.
  */
 client.write(JSON.stringify(request) + `\n`, (err) => {
   if (err) {
@@ -219,61 +219,60 @@ client.write(JSON.stringify(request) + `\n`, (err) => {
 });
 
 /**
- * When the message event is received,
- * the response sent by the server is processed.
+ * Cuando se recibe el evento de mensaje,
+ * se procesa la respuesta enviada por el servidor.
  */
 socket.on('message', (jsonRequest) => {
   switch (jsonRequest.type) {
     case 'add':
       if (jsonRequest.success) {
-        console.log( chalk.bold.green('New note added!'));
+        console.log( chalk.bold.green('¡Nueva nota añadida!'));
       } else {
-        console.log(chalk.bold.red('Note titulo taken! '));
+        console.log(chalk.bold.red('Nota titulo tomado!'));
       }
       break;
     case 'modify':
       if (jsonRequest.success) {
-        console.log(chalk.bold.green('Note modified!'));
+        console.log(chalk.bold.green('¡Nota modificada!'));
       } else {
         console.log(chalk.
-            bold.red('The note you want to modify does not exist!'));
+            bold.red('¡La nota que quieres modificar no existe!'));
       }
       break;
     case 'remove':
-      if (jsonRequest.success ) {
-        console.log(chalk.bold.green('Note removed!') );
+      if (jsonRequest.success) {
+        console.log(chalk.bold.green('¡Nota eliminada!') );
       } else {
-        console.log( chalk.bold.red('Note not found'));
+        console.log(chalk.bold.red('Nota no encontrada'));
       }
       break;
     case 'list':
       if (jsonRequest.success) {
         console.log('Your notes' );
         jsonRequest.notes.forEach((note: any) => {
-          console.log( chalk.bold.keyword(note.color)(note.titulo));
+          console.log(chalk.bold.keyword(note.color)(note.titulo));
         });
       } else {
-        console.log(chalk.bold.red('You have never saved a note') );
+        console.log(chalk.bold.red('Nunca has guardado una nota.') );
       }
       break;
     case 'read':
       if (jsonRequest.success) {
-        console.log(chalk.bold.
-            keyword(jsonRequest.notes[0].color)(jsonRequest.notes[0].titulo +
-              '\n' + jsonRequest.notes[0].cuerpo));
+        // eslint-disable-next-line max-len
+        console.log(chalk.bold.keyword(jsonRequest.notes[0].color)(jsonRequest.notes[0].titulo + '\n' + jsonRequest.notes[0].cuerpo));
       } else {
-        console.log(chalk.bold.red('Note not found') );
+        console.log(chalk.bold.red('Nota no encontrada') );
       }
       break;
     default:
-      console.log(chalk.bold.red('The type of message is wrong'));
+      console.log(chalk.bold.red('El tipo de mensaje es incorrecto.'));
       break;
   }
 });
 
 /**
- * If there is an error in the connection it is handled properly.
+ * Si hay un error en la conexión se maneja correctamente.
  */
 client.on( 'error', (err) => {
-  console.log(`Connection could not be established: ${err.message}` );
+  console.log(`No se pudo establecer la conexión: ${err.message}` );
 });

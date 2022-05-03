@@ -1,4 +1,5 @@
 import {Color} from './app/Color';
+import {Nota} from './app/Nota';
 
 /**
  * Type that represents the elements that a request message must include.
@@ -17,5 +18,5 @@ export type RequestType = {
 export type ResponseType = {
   type: 'add' | 'modify' | 'remove' | 'read' | 'list';
   success: boolean;
-  notes?: string;
+  notes?: Nota[];
 }

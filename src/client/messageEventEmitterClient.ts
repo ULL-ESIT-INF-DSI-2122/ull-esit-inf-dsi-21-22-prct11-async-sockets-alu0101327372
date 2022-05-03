@@ -1,17 +1,18 @@
 import {EventEmitter} from 'events';
 
 /**
- * Class that emits a message event when it receives a complete message.
+ * @class Clase que emite un evento de mensaje
+ * cuando recibe un mensaje completo.
  */
 export class MessageEventEmitterClient extends EventEmitter {
   /**
-   * Constructor of the class that receives
-   * portions of a message with the data event,
-   * and when it receives an end event,
-   * it emits a message event to indicate that it has
-   * received a complete message.
-   * @param connection An object of the EventEmitter class
-   * to be used as a socket.
+   * Constructor de la clase que recibe
+   * porciones de un mensaje con el evento de datos,
+   * y cuando recibe un evento final,
+   * emite un evento de mensaje para indicar que tiene
+   * recibido un mensaje completo.
+   * @param connection Un objeto de la clase EventEmitter
+   * para ser utilizado como socket.
    */
   constructor(connection: EventEmitter) {
     super();
