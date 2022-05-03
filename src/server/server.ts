@@ -28,15 +28,15 @@ const server = net.createServer((connection) => {
     };
     switch (note.type) {
       case 'add':
-        if (!database.addNota(note.usuario, note.titulo,
-            note.cuerpo, note.color)) {
+        // eslint-disable-next-line max-len
+        if (!database.addNota(note.usuario, note.titulo, note.cuerpo, note.color)) {
           response.success = false;
         }
         break;
       case 'modify':
         response.type = 'modify';
-        if (!database.modifyNota(note.usuario, note.titulo,
-            note.cuerpo, note.color)) {
+        // eslint-disable-next-line max-len
+        if (!database.modifyNota(note.usuario, note.titulo, note.cuerpo, note.color)) {
           response.success = false;
         }
         break;

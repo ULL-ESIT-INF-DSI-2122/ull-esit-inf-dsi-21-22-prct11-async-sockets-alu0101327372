@@ -1,4 +1,4 @@
 /**
  * @type {string} Colores permitidos.
  */
-export type Color = 'rojo' | 'verde' | 'azul' | 'amarillo';
+export type Color = 'red' | 'green' | 'blue' | 'yellow';

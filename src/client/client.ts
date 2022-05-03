@@ -53,9 +53,9 @@ yargs.command( {
   handler(argv) {
     if (typeof argv.cuerpo === 'string' && typeof argv.titulo === 'string' &&
         typeof argv.usuario === 'string' && typeof argv.color === 'string') {
-      if (argv.color == 'rojo' || argv.color == 'verde' ||
-          argv.color == 'azul' || argv.color == 'amarillo') {
-        request ={
+      if (argv.color == 'red' || argv.color == 'green' ||
+          argv.color == 'blue' || argv.color == 'yellow') {
+        request = {
           type: 'add',
           usuario: argv.usuario,
           titulo: argv.titulo,
@@ -63,8 +63,8 @@ yargs.command( {
           color: argv.color,
         };
       } else {
-        console.log(chalk.bold.
-            red('El color de la nota debe ser rojo, verde, amarillo o azul.'));
+        // eslint-disable-next-line max-len
+        console.log(chalk.red('El color de la nota debe ser red, green, yellow o blue.'));
       }
     }
   },
@@ -105,11 +105,10 @@ yargs.command({
   handler(argv) {
     if (typeof argv.cuerpo === 'string' && typeof argv.color === 'string' &&
           typeof argv.usuario === 'string' && typeof argv.titulo === 'string') {
-      if (argv.color != 'azul' &&
-            argv.color != 'rojo' && argv.color != 'amarillo' &&
-            argv.color != 'verde') {
-        console.log(chalk.bold.
-            red('El color de la nota debe ser rojo, verde, azul o amarillo.'));
+      if (argv.color != 'blue' && argv.color != 'red' &&
+          argv.color != 'yellow' && argv.color != 'green') {
+        // eslint-disable-next-line max-len
+        console.log(chalk.red('El color de la nota debe ser red, green, blue o yellow.'));
       } else {
         request = {
           type: 'modify',
@@ -214,7 +213,7 @@ yargs.parse();
  */
 client.write(JSON.stringify(request) + `\n`, (err) => {
   if (err) {
-    console.log(chalk.bold.red('The note could not be sent to the server.'));
+    console.log(chalk.red('La nota no se puede enviar al servidor'));
   }
 });
 
@@ -226,46 +225,45 @@ socket.on('message', (jsonRequest) => {
   switch (jsonRequest.type) {
     case 'add':
       if (jsonRequest.success) {
-        console.log( chalk.bold.green('¡Nueva nota añadida!'));
+        console.log( chalk.green('¡Nueva nota añadida!'));
       } else {
-        console.log(chalk.bold.red('Nota titulo tomado!'));
+        console.log(chalk.red('Nota titulo tomado!'));
       }
       break;
     case 'modify':
       if (jsonRequest.success) {
-        console.log(chalk.bold.green('¡Nota modificada!'));
+        console.log(chalk.green('¡Nota modificada!'));
       } else {
-        console.log(chalk.
-            bold.red('¡La nota que quieres modificar no existe!'));
+        console.log(chalk.red('¡La nota que quieres modificar no existe!'));
       }
       break;
     case 'remove':
       if (jsonRequest.success) {
-        console.log(chalk.bold.green('¡Nota eliminada!') );
+        console.log(chalk.green('¡Nota eliminada!') );
       } else {
-        console.log(chalk.bold.red('Nota no encontrada'));
+        console.log(chalk.red('Nota no encontrada'));
       }
       break;
     case 'list':
       if (jsonRequest.success) {
-        console.log('Your notes' );
+        console.log('Tus notas');
         jsonRequest.notes.forEach((note: any) => {
-          console.log(chalk.bold.keyword(note.color)(note.titulo));
+          console.log(chalk.keyword(note.color)(note.titulo));
         });
       } else {
-        console.log(chalk.bold.red('Nunca has guardado una nota.') );
+        console.log(chalk.red('Nunca has guardado una nota.'));
       }
       break;
     case 'read':
       if (jsonRequest.success) {
         // eslint-disable-next-line max-len
-        console.log(chalk.bold.keyword(jsonRequest.notes[0].color)(jsonRequest.notes[0].titulo + '\n' + jsonRequest.notes[0].cuerpo));
+        console.log(chalk.keyword(jsonRequest.notes[0].color)(jsonRequest.notes[0].titulo + '\n' + jsonRequest.notes[0].cuerpo));
       } else {
-        console.log(chalk.bold.red('Nota no encontrada') );
+        console.log(chalk.red('Nota no encontrada'));
       }
       break;
     default:
-      console.log(chalk.bold.red('El tipo de mensaje es incorrecto.'));
+      console.log(chalk.red('El tipo de mensaje es incorrecto.'));
       break;
   }
 });

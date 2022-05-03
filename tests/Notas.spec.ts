@@ -3,7 +3,7 @@ import {expect} from 'chai';
 import {Nota} from '../src/app/Nota';
 
 describe('Test de la clase Nota', () => {
-  const nota = new Nota('Mi nueva nota', 'Esta nota es una prueba', 'azul');
+  const nota = new Nota('Mi nueva nota', 'Esta nota es una prueba', 'blue');
 
   it('Una nota es una intancia de la clase Nota', () => {
     expect(nota).to.be.instanceOf(Nota);
@@ -18,7 +18,7 @@ describe('Test de la clase Nota', () => {
   });
 
   it('El color de la nota es Blue', () => {
-    expect(nota.getColor()).to.be.eql('azul');
+    expect(nota.getColor()).to.be.eql('blue');
   });
 
   it('El color de la nota es Blue', () => {
