@@ -1,7 +1,8 @@
 import {EventEmitter} from 'events';
 
 /**
- * Clase que emite un evento de solicitud cuando recibe un mensaje completo.
+ * @class Clase que emite un evento de solicitud
+ * cuando recibe un mensaje completo.
  */
 export class MessageEventEmitterServer extends EventEmitter {
   /**
