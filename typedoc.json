@@ -7,7 +7,9 @@
     "./src/client/messageEventEmitterClient.ts",
     "./src/server/server.ts",
     "./src/server/messageEventEmitterServer.ts",
-    "./src/types.ts"
+    "./src/types.ts",
+    "./src/mod/app.ts",
+    "./src/mod/Command.ts"
   ],
   "out": "./doc"
 }
